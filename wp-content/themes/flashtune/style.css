@@ -1,0 +1,19 @@
+/*
+Theme Name: FlashTune
+Theme URI: https://github.com/AlbertDirksen15/flash_tune_toll
+Author: FlashTune
+Description: Custom neon automotive tuning theme.
+Version: 0.1.0
+Text Domain: flashtune
+*/
+
+:root {
+  --ft-bg:#070912;
+  --ft-panel:#101522;
+  --ft-text:#f7f8fb;
+  --ft-muted:#9aa6ba;
+  --ft-red:#ff245c;
+  --ft-cyan:#18d7ff;
+  --ft-violet:#8b5cff;
+}
+body{margin:0;background:var(--ft-bg);color:var(--ft-text);font-family:Inter,Arial,sans-serif}
