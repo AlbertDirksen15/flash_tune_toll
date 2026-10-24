@@ -3,248 +3,151 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#070912">
-  <title>FlashTune — демо сервиса калибровок ЭБУ</title>
-  <meta name="description" content="Демо FlashTune: подбор калибровок ЭБУ, каталог, загрузка оригинального файла и личный кабинет.">
-  <link rel="stylesheet" href="./styles.css">
+  <title>FlashTune — демо</title>
+  <meta name="description" content="FlashTune — демо сайта автомобильных прошивок в неоновом cyberpunk стиле.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="noise"></div>
-
-<header class="topbar">
-  <a class="brand" href="#top" aria-label="FlashTune">
-    <span class="bolt">ϟ</span>
-    <span>Flash<b>Tune</b></span>
-    <small>КАЛИБРОВКИ ЭБУ</small>
-  </a>
-
-  <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
-
-  <nav class="main-nav" id="mainNav">
-    <a href="#catalog">Каталог</a>
-    <a href="#how">Как это работает</a>
-    <a href="#upload">Загрузить файл</a>
-    <a href="#account">Кабинет</a>
-  </nav>
-
-  <div class="header-actions">
-    <button class="ghost-btn" data-open="login">Войти</button>
-    <button class="cart-btn" id="cartBtn">Корзина <span id="cartCount">0</span></button>
-  </div>
-</header>
-
-<main id="top">
-  <section class="hero section-shell">
-    <div class="hero-copy">
-      <div class="eyebrow"><span></span> ПРОШИВКИ • ТЮНИНГ • МОЩНОСТЬ</div>
-      <h1>АВТОМОБИЛЬНЫЕ <em>КАЛИБРОВКИ</em></h1>
-      <p class="hero-lead">Подбор готового решения по автомобилю, ECU, HW и SW. Если точного совпадения нет — загрузите оригинальный файл для индивидуальной обработки.</p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#finder">Подобрать калибровку</a>
-        <a class="btn secondary" href="#upload">Загрузить оригинал</a>
-      </div>
-      <div class="hero-points">
-        <span>✓ Проверка совместимости</span>
-        <span>✓ Доступ после оплаты</span>
-        <span>✓ История заказов</span>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="logo" href="#">
+        <span class="bolt">⚡</span>
+        <span class="logo-text"><strong>Flash<span>Tune</span></strong><small>прошивки и тюнинг ЭБУ</small></span>
+      </a>
+      <nav class="main-nav">
+        <a class="active" href="#">Главная</a>
+        <a href="#catalog">Каталог</a>
+        <a href="#brands">Марки</a>
+        <a href="#services">Услуги</a>
+        <a href="#footer">Контакты</a>
+      </nav>
+      <div class="nav-actions">
+        <button>Поиск</button>
+        <button>Вход</button>
+        <button>Корзина <span class="dot">1</span></button>
       </div>
     </div>
+  </header>
 
-    <div class="hero-visual" aria-label="Неоновый концепт FlashTune">
-      <div class="city-lines"></div>
-      <div class="moon"></div>
-      <div class="mascot">
-        <div class="hair"></div>
-        <div class="face"></div>
-        <div class="body"></div>
-        <div class="jacket"></div>
-      </div>
-      <div class="car">
-        <div class="wing"></div>
-        <div class="glass"></div>
-        <div class="tail t1"></div><div class="tail t2"></div>
-        <div class="plate">FT•01</div>
-      </div>
-      <div class="speed-line l1"></div><div class="speed-line l2"></div><div class="speed-line l3"></div>
-      <div class="visual-badge"><b>50 000+</b><span>решений в базе</span></div>
-    </div>
-  </section>
-
-  <section class="finder-wrap section-shell" id="finder">
-    <div class="finder-card">
-      <div class="finder-head">
-        <div>
-          <span class="kicker">ИНТЕЛЛЕКТУАЛЬНЫЙ ПОДБОР</span>
-          <h2>Найдём решение под ваш блок</h2>
+  <main>
+    <section class="hero-wrap">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="tag">ПРОШИВКИ • ТЮНИНГ • МОЩНОСТЬ</div>
+          <h1>АВТОМОБИЛЬНЫЕ <span>ПРОШИВКИ</span></h1>
+          <h2>БОЛЬШЕ МОЩНОСТИ. ТОЧНАЯ НАСТРОЙКА. ПОЛНЫЙ КОНТРОЛЬ.</h2>
+          <p>Каталог готовых прошивок и решений для чип-тюнинга ЭБУ. Stage 1–3, отключение систем, улучшение динамики и экономии.</p>
+          <div class="hero-buttons">
+            <a class="btn btn-primary" href="#finder">Подобрать прошивку</a>
+            <a class="btn btn-secondary" href="#upload">Загрузить файл</a>
+          </div>
+          <div class="hero-features">
+            <div><b>Проверено</b><span>на стенде</span></div>
+            <div><b>Безопасно</b><span>для ЭБУ</span></div>
+            <div><b>Максимум</b><span>производительности</span></div>
+          </div>
         </div>
-        <div class="mode-switch">
-          <button class="mode active" data-mode="car">По автомобилю</button>
-          <button class="mode" data-mode="ecu">По ECU / HW / SW</button>
+        <div class="hero-art">
+          <img src="assets/hero-scene.svg" alt="FlashTune — девушка, спортивный автомобиль и неоновый город">
         </div>
       </div>
+    </section>
 
-      <div class="finder-grid" id="carFinder">
-        <label>Марка<select id="brandFilter"><option value="">Любая марка</option></select></label>
-        <label>Модель<select id="modelFilter"><option value="">Любая модель</option></select></label>
-        <label>Двигатель<select id="engineFilter"><option value="">Любой двигатель</option></select></label>
-        <label>ЭБУ<select id="ecuFilter"><option value="">Любой ЭБУ</option></select></label>
-        <button class="search-btn" id="findBtn">Найти решение</button>
+    <section class="finder container" id="finder">
+      <div class="finder-title">ПОДБОР ПРОШИВКИ ПО АВТОМОБИЛЮ</div>
+      <div class="finder-grid">
+        <label><span>Марка</span><select><option>Выберите марку</option><option>BMW</option><option>Audi</option><option>Mercedes</option></select></label>
+        <label><span>Модель</span><select><option>Выберите модель</option><option>320d F30</option><option>A4 B9</option><option>Sprinter</option></select></label>
+        <label><span>Двигатель</span><select><option>Выберите двигатель</option><option>2.0d B47</option><option>2.0 TDI</option><option>2.1 CDI</option></select></label>
+        <label><span>ЭБУ</span><select><option>Выберите ЭБУ</option><option>Bosch EDC17C50</option><option>MD1</option><option>Delphi</option></select></label>
+        <button class="btn btn-search">НАЙТИ</button>
       </div>
+    </section>
 
-      <div class="finder-grid hidden" id="ecuFinder">
-        <label class="wide">ECU / HW / SW<input id="ecuSearch" placeholder="Например: EDC17C50, 028101..., 10375..."></label>
-        <label>Тип<select id="typeFilter">
-          <option value="">Все варианты</option>
-          <option>Stage 1</option><option>Stage 2</option><option>EGR Off</option><option>DPF Off</option><option>AdBlue Off</option>
-        </select></label>
-        <button class="search-btn" id="ecuFindBtn">Проверить базу</button>
+    <section class="container service-cards" id="services">
+      <article><div class="service-icon cyan">◉</div><h3>STAGE 1</h3><p>Оптимизация мощности и крутящего момента</p></article>
+      <article><div class="service-icon violet">▦</div><h3>STAGE 2</h3><p>Серьёзный прирост мощности</p></article>
+      <article><div class="service-icon red">⚙</div><h3>EGR OFF</h3><p>Отключение системы EGR</p></article>
+      <article><div class="service-icon orange">▰</div><h3>DPF OFF</h3><p>Отключение сажевого фильтра</p></article>
+      <article><div class="service-icon cyan">⌁</div><h3>ADBLUE OFF</h3><p>Отключение системы AdBlue / SCR</p></article>
+      <article><div class="service-icon violet">▣</div><h3>КАТАЛОГ ПО ЭБУ</h3><p>Большая база прошивок для разных ЭБУ</p></article>
+    </section>
+
+    <section class="container stats-row">
+      <div><strong>50 000+</strong><span>готовых прошивок</span></div>
+      <div><strong>24/7</strong><span>доступ к каталогу</span></div>
+      <div><strong>1000+</strong><span>моделей авто</span></div>
+      <div><strong>100%</strong><span>безопасно и надёжно</span></div>
+    </section>
+
+    <section class="container brands" id="brands">
+      <div class="section-head"><h2>ПОПУЛЯРНЫЕ МАРКИ</h2></div>
+      <div class="brand-grid">
+        <div><b>BMW</b></div><div><b>AUDI</b></div><div><b>MERCEDES</b></div><div><b>TOYOTA</b></div><div><b>VOLKSWAGEN</b></div><div><b>FORD</b></div>
       </div>
+    </section>
 
-      <div class="scan-status" id="scanStatus">
-        <div class="scan-bar"><i></i></div>
-        <span>Проверяем совместимость по каталогу…</span>
+    <section class="container products" id="catalog">
+      <div class="section-head"><h2>ПОПУЛЯРНЫЕ ПРОШИВКИ</h2><a href="#">Смотреть все →</a></div>
+      <div class="product-grid">
+        <article class="product-card">
+          <div class="product-thumb car1"></div>
+          <h3>BMW 320d F30<br>Stage 1</h3>
+          <ul><li>2.0d B47</li><li>190 л.с. → 230 л.с.</li><li>Крутящий момент +20%</li></ul>
+          <div class="price-row"><strong>5 900 ₽</strong><button>🛒</button></div>
+        </article>
+        <article class="product-card">
+          <div class="product-thumb car2"></div>
+          <h3>VAG 2.0 TDI<br>DPF Off</h3>
+          <ul><li>2.0 TDI CR</li><li>Удаление DPF</li><li>Без ошибок</li></ul>
+          <div class="price-row"><strong>4 500 ₽</strong><button>🛒</button></div>
+        </article>
+        <article class="product-card">
+          <div class="product-thumb van"></div>
+          <h3>Mercedes Sprinter<br>EGR Off</h3>
+          <ul><li>2.1 CDI OM651</li><li>Отключение EGR</li><li>Без ошибок</li></ul>
+          <div class="price-row"><strong>4 500 ₽</strong><button>🛒</button></div>
+        </article>
+        <article class="product-card">
+          <div class="product-thumb suv"></div>
+          <h3>Toyota 2.8 D-4D<br>Stage 1</h3>
+          <ul><li>2.8 D-4D</li><li>204 л.с. → 255 л.с.</li><li>Крутящий момент +15%</li></ul>
+          <div class="price-row"><strong>6 500 ₽</strong><button>🛒</button></div>
+        </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="stats section-shell">
-    <article><b>50 000+</b><span>готовых решений</span></article>
-    <article><b>24/7</b><span>доступ к покупкам</span></article>
-    <article><b>1000+</b><span>моделей автомобилей</span></article>
-    <article><b>2 пути</b><span>авто или ECU/HW/SW</span></article>
-  </section>
-
-  <section class="section-shell category-section">
-    <div class="section-title">
-      <div><span class="kicker">ПОПУЛЯРНЫЕ РЕШЕНИЯ</span><h2>Что можно подобрать</h2></div>
-    </div>
-    <div class="service-grid">
-      <article><i>01</i><b>STAGE 1</b><p>Прирост мощности и момента без аппаратных доработок.</p></article>
-      <article><i>02</i><b>STAGE 2</b><p>Расширенная калибровка под подготовленный автомобиль.</p></article>
-      <article><i>03</i><b>EGR OFF</b><p>Категория решений для соответствующих конфигураций.</p></article>
-      <article><i>04</i><b>DPF OFF</b><p>Категория решений по совместимым идентификаторам.</p></article>
-      <article><i>05</i><b>AdBlue</b><p>Решения для поддерживаемых ECU и версий ПО.</p></article>
-      <article><i>06</i><b>ECU каталог</b><p>Поиск по производителю блока, HW и SW.</p></article>
-    </div>
-  </section>
-
-  <section class="section-shell brands">
-    <span>BMW</span><span>AUDI</span><span>MERCEDES</span><span>VOLKSWAGEN</span><span>TOYOTA</span><span>FORD</span><span>SKODA</span>
-  </section>
-
-  <section class="section-shell catalog" id="catalog">
-    <div class="section-title">
-      <div><span class="kicker">ДЕМО-КАТАЛОГ</span><h2>Найденные калибровки</h2></div>
-      <div class="catalog-tools">
-        <input id="quickSearch" placeholder="Поиск по модели, ECU, HW, SW">
-        <select id="sortSelect"><option value="popular">Сначала популярные</option><option value="cheap">Сначала дешевле</option><option value="expensive">Сначала дороже</option></select>
+    <section class="container upload-block" id="upload">
+      <div>
+        <div class="section-head"><h2>ЗАГРУЗИТЬ ОРИГИНАЛЬНЫЙ ФАЙЛ</h2></div>
+        <p>Если точного совпадения в каталоге нет, клиент загружает оригинальный файл, а готовое решение потом появляется в личном кабинете.</p>
       </div>
+      <div class="upload-box">
+        <strong>Перетащите BIN / ORI / ZIP</strong>
+        <span>или нажмите для выбора файла</span>
+        <button class="btn btn-secondary">Выбрать файл</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="logo footer-logo" href="#">
+          <span class="bolt">⚡</span>
+          <span class="logo-text"><strong>Flash<span>Tune</span></strong><small>прошивки и тюнинг ЭБУ</small></span>
+        </a>
+        <p>Лидер в области разработки и продажи прошивок для чип-тюнинга. Максимум мощности, без компромиссов.</p>
+      </div>
+      <div><h4>КАТАЛОГ</h4><a href="#">Все прошивки</a><a href="#">Stage 1 / 2 / 3</a><a href="#">Отключение систем</a><a href="#">Каталог по ЭБУ</a></div>
+      <div><h4>ИНФОРМАЦИЯ</h4><a href="#">Как это работает</a><a href="#">Гарантии</a><a href="#">Оплата и доставка</a><a href="#">FAQ</a></div>
+      <div><h4>ПОДДЕРЖКА</h4><a href="#">Поддержка 24/7</a><a href="#">Загрузить файл</a><a href="#">Удалённая настройка</a><a href="#">Контакты</a></div>
+      <div><h4>КОНТАКТЫ</h4><a href="#">8 (800) 555-35-35</a><a href="#">support@flashtune.ru</a><a href="#">Россия, Москва</a><p class="accent">МЫ НА СВЯЗИ 24/7</p></div>
     </div>
-    <div class="result-line"><span id="resultCount">0 решений</span><button id="resetFilters">Сбросить фильтры</button></div>
-    <div class="product-grid" id="productGrid"></div>
-  </section>
-
-  <section class="section-shell how" id="how">
-    <div class="section-title">
-      <div><span class="kicker">КАК ЭТО РАБОТАЕТ</span><h2>От подбора до файла</h2></div>
+    <div class="container footer-bottom">
+      <span>© 2026 FlashTune. Все права защищены.</span>
+      <span>Пользовательское соглашение · Политика конфиденциальности</span>
     </div>
-    <div class="steps">
-      <article><span>1</span><h3>Выбираете автомобиль</h3><p>Или вводите ECU, HW и SW напрямую.</p></article>
-      <article><span>2</span><h3>Система проверяет базу</h3><p>Показывает только подходящие варианты и предупреждает о несовпадении.</p></article>
-      <article><span>3</span><h3>Оплачиваете заказ</h3><p>В рабочей версии платёж будет через WooCommerce + выбранный шлюз.</p></article>
-      <article><span>4</span><h3>Получаете доступ</h3><p>Файл появляется в личном кабинете после подтверждённой оплаты.</p></article>
-    </div>
-  </section>
-
-  <section class="section-shell upload-section" id="upload">
-    <div class="upload-copy">
-      <span class="kicker">НЕТ ТОЧНОГО СОВПАДЕНИЯ?</span>
-      <h2>Загрузите оригинальный файл</h2>
-      <p>В рабочей версии файл будет привязан к заказу. Специалист сможет обработать его и вернуть результат в личный кабинет.</p>
-      <ul>
-        <li>BIN / ORI / ZIP</li>
-        <li>Привязка к заказу</li>
-        <li>Статус «В обработке»</li>
-        <li>Готовый файл в кабинете</li>
-      </ul>
-    </div>
-    <div class="dropzone" id="dropzone">
-      <div class="upload-icon">⇧</div>
-      <b>Перетащите оригинальный файл сюда</b>
-      <span>или нажмите, чтобы выбрать файл</span>
-      <small>Демо: файл никуда не отправляется</small>
-      <input type="file" id="fileInput" hidden>
-    </div>
-  </section>
-
-  <section class="section-shell account-demo" id="account">
-    <div class="section-title">
-      <div><span class="kicker">ЛИЧНЫЙ КАБИНЕТ — ДЕМО</span><h2>Покупки и заказы</h2></div>
-      <button class="ghost-btn" data-open="login">Войти в кабинет</button>
-    </div>
-    <div class="account-grid">
-      <article class="account-card">
-        <div class="order-head"><b>Заказ #FT-1048</b><span class="paid">Оплачено</span></div>
-        <h3>BMW 320d F30 — Stage 1</h3>
-        <p>Bosch EDC17C50 • HW 028101xxxx • SW 1037523456</p>
-        <button class="download-demo">Скачать файл</button>
-      </article>
-      <article class="account-card">
-        <div class="order-head"><b>Заказ #FT-1049</b><span class="processing">В обработке</span></div>
-        <h3>Индивидуальная калибровка</h3>
-        <p>Загружен original_vw_20tdi.bin • 2.1 MB</p>
-        <button disabled>Ожидается результат</button>
-      </article>
-    </div>
-  </section>
-
-  <section class="section-shell faq">
-    <div class="section-title"><div><span class="kicker">FAQ</span><h2>Частые вопросы</h2></div></div>
-    <details><summary>Где будут храниться файлы?</summary><p>На первом этапе — в закрытой папке на VPS. Прямые публичные ссылки не используются.</p></details>
-    <details><summary>Когда клиент получает скачивание?</summary><p>После подтверждения оплаты заказом WooCommerce. Затем ссылка появляется в личном кабинете.</p></details>
-    <details><summary>Можно ли импортировать десятки тысяч записей?</summary><p>Да. Для этого будет отдельный импорт из CSV/структуры папок с проверкой дублей.</p></details>
-  </section>
-</main>
-
-<footer class="footer">
-  <div class="footer-main section-shell">
-    <div class="footer-brand">
-      <div class="brand"><span class="bolt">ϟ</span><span>Flash<b>Tune</b></span></div>
-      <p>Сервис подбора и выдачи калибровок ЭБУ.</p>
-      <div class="socials"><a href="#">VK</a><a href="#">TG</a><a href="#">YT</a></div>
-    </div>
-    <div><h4>Каталог</h4><a href="#catalog">Все решения</a><a href="#catalog">Stage 1 / 2</a><a href="#catalog">По ECU</a><a href="#upload">Индивидуальный заказ</a></div>
-    <div><h4>Информация</h4><a href="#how">Как это работает</a><a href="#faq">FAQ</a><a href="#">Оплата</a><a href="#">Гарантии</a></div>
-    <div><h4>Поддержка</h4><a href="#upload">Загрузить файл</a><a href="#account">Личный кабинет</a><a href="#">Сотрудничество</a><a href="#">Контакты</a></div>
-  </div>
-  <div class="footer-bottom section-shell"><span>© 2026 FlashTune — демонстрационный прототип</span><span><a href="#">Пользовательское соглашение</a> · <a href="#">Политика конфиденциальности</a></span></div>
-</footer>
-
-<div class="modal" id="cartModal" aria-hidden="true">
-  <div class="modal-card">
-    <button class="modal-close" data-close>×</button>
-    <span class="kicker">КОРЗИНА — ДЕМО</span>
-    <h2>Ваш заказ</h2>
-    <div id="cartItems" class="cart-items"></div>
-    <div class="cart-total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
-    <button class="btn primary full" id="checkoutDemo">Перейти к оплате</button>
-    <small>В демо деньги не списываются. В WordPress здесь будет WooCommerce + платёжный шлюз.</small>
-  </div>
-</div>
-
-<div class="modal" id="loginModal" aria-hidden="true">
-  <div class="modal-card narrow">
-    <button class="modal-close" data-close>×</button>
-    <span class="kicker">ЛИЧНЫЙ КАБИНЕТ</span>
-    <h2>Вход</h2>
-    <label>Email<input value="demo@flashtune.ru"></label>
-    <label>Пароль<input type="password" value="demopassword"></label>
-    <button class="btn primary full" id="demoLogin">Войти в демо</button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="./app.js"></script>
+  </footer>
 </body>
 </html>
