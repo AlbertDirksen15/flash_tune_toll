@@ -1,0 +1,15 @@
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Secrets
+.env
+.env.*
