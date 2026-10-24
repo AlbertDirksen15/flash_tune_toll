@@ -3,38 +3,248 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>FlashTune — Preview</title>
+  <meta name="theme-color" content="#070912">
+  <title>FlashTune — демо сервиса калибровок ЭБУ</title>
+  <meta name="description" content="Демо FlashTune: подбор калибровок ЭБУ, каталог, загрузка оригинального файла и личный кабинет.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<header class="nav">
-  <strong class="logo">Flash<span>Tune</span></strong>
-  <nav><a href="#catalog">Каталог</a><a href="#services">Услуги</a><a href="#contact">Контакты</a></nav>
-</header>
-<main>
-<section class="hero">
-  <div>
-    <div class="tag">ПРОШИВКИ • ТЮНИНГ • МОЩНОСТЬ</div>
-    <h1>АВТОМОБИЛЬНЫЕ <span>ПРОШИВКИ</span></h1>
-    <p>Интеллектуальный подбор калибровок по автомобилю, ECU, HW и SW.</p>
-    <div class="actions"><a class="btn hot" href="#catalog">Подобрать прошивку</a><a class="btn" href="#upload">Загрузить файл</a></div>
+<div class="noise"></div>
+
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="FlashTune">
+    <span class="bolt">ϟ</span>
+    <span>Flash<b>Tune</b></span>
+    <small>КАЛИБРОВКИ ЭБУ</small>
+  </a>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
+
+  <nav class="main-nav" id="mainNav">
+    <a href="#catalog">Каталог</a>
+    <a href="#how">Как это работает</a>
+    <a href="#upload">Загрузить файл</a>
+    <a href="#account">Кабинет</a>
+  </nav>
+
+  <div class="header-actions">
+    <button class="ghost-btn" data-open="login">Войти</button>
+    <button class="cart-btn" id="cartBtn">Корзина <span id="cartCount">0</span></button>
   </div>
-  <div class="art"><div class="glow"></div><div class="car">FLASH<span>TUNE</span></div></div>
-</section>
-<section class="finder" id="catalog">
-  <h2>Подбор прошивки по автомобилю</h2>
-  <div class="fields"><button>Марка</button><button>Модель</button><button>Двигатель</button><button>ЭБУ</button><button class="search">Найти</button></div>
-</section>
-<section class="cards" id="services">
-  <article><b>STAGE 1</b><small>Оптимизация мощности</small></article>
-  <article><b>STAGE 2</b><small>Расширенная калибровка</small></article>
-  <article><b>EGR OFF</b><small>Системное решение</small></article>
-  <article><b>DPF OFF</b><small>Системное решение</small></article>
-  <article><b>ADBLUE</b><small>SCR / AdBlue</small></article>
-  <article><b>ECU</b><small>Каталог по блокам</small></article>
-</section>
-<section class="stats"><div><strong>50 000+</strong><span>решений</span></div><div><strong>24/7</strong><span>доступ</span></div><div><strong>1000+</strong><span>моделей авто</span></div></section>
+</header>
+
+<main id="top">
+  <section class="hero section-shell">
+    <div class="hero-copy">
+      <div class="eyebrow"><span></span> ПРОШИВКИ • ТЮНИНГ • МОЩНОСТЬ</div>
+      <h1>АВТОМОБИЛЬНЫЕ <em>КАЛИБРОВКИ</em></h1>
+      <p class="hero-lead">Подбор готового решения по автомобилю, ECU, HW и SW. Если точного совпадения нет — загрузите оригинальный файл для индивидуальной обработки.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#finder">Подобрать калибровку</a>
+        <a class="btn secondary" href="#upload">Загрузить оригинал</a>
+      </div>
+      <div class="hero-points">
+        <span>✓ Проверка совместимости</span>
+        <span>✓ Доступ после оплаты</span>
+        <span>✓ История заказов</span>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-label="Неоновый концепт FlashTune">
+      <div class="city-lines"></div>
+      <div class="moon"></div>
+      <div class="mascot">
+        <div class="hair"></div>
+        <div class="face"></div>
+        <div class="body"></div>
+        <div class="jacket"></div>
+      </div>
+      <div class="car">
+        <div class="wing"></div>
+        <div class="glass"></div>
+        <div class="tail t1"></div><div class="tail t2"></div>
+        <div class="plate">FT•01</div>
+      </div>
+      <div class="speed-line l1"></div><div class="speed-line l2"></div><div class="speed-line l3"></div>
+      <div class="visual-badge"><b>50 000+</b><span>решений в базе</span></div>
+    </div>
+  </section>
+
+  <section class="finder-wrap section-shell" id="finder">
+    <div class="finder-card">
+      <div class="finder-head">
+        <div>
+          <span class="kicker">ИНТЕЛЛЕКТУАЛЬНЫЙ ПОДБОР</span>
+          <h2>Найдём решение под ваш блок</h2>
+        </div>
+        <div class="mode-switch">
+          <button class="mode active" data-mode="car">По автомобилю</button>
+          <button class="mode" data-mode="ecu">По ECU / HW / SW</button>
+        </div>
+      </div>
+
+      <div class="finder-grid" id="carFinder">
+        <label>Марка<select id="brandFilter"><option value="">Любая марка</option></select></label>
+        <label>Модель<select id="modelFilter"><option value="">Любая модель</option></select></label>
+        <label>Двигатель<select id="engineFilter"><option value="">Любой двигатель</option></select></label>
+        <label>ЭБУ<select id="ecuFilter"><option value="">Любой ЭБУ</option></select></label>
+        <button class="search-btn" id="findBtn">Найти решение</button>
+      </div>
+
+      <div class="finder-grid hidden" id="ecuFinder">
+        <label class="wide">ECU / HW / SW<input id="ecuSearch" placeholder="Например: EDC17C50, 028101..., 10375..."></label>
+        <label>Тип<select id="typeFilter">
+          <option value="">Все варианты</option>
+          <option>Stage 1</option><option>Stage 2</option><option>EGR Off</option><option>DPF Off</option><option>AdBlue Off</option>
+        </select></label>
+        <button class="search-btn" id="ecuFindBtn">Проверить базу</button>
+      </div>
+
+      <div class="scan-status" id="scanStatus">
+        <div class="scan-bar"><i></i></div>
+        <span>Проверяем совместимость по каталогу…</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats section-shell">
+    <article><b>50 000+</b><span>готовых решений</span></article>
+    <article><b>24/7</b><span>доступ к покупкам</span></article>
+    <article><b>1000+</b><span>моделей автомобилей</span></article>
+    <article><b>2 пути</b><span>авто или ECU/HW/SW</span></article>
+  </section>
+
+  <section class="section-shell category-section">
+    <div class="section-title">
+      <div><span class="kicker">ПОПУЛЯРНЫЕ РЕШЕНИЯ</span><h2>Что можно подобрать</h2></div>
+    </div>
+    <div class="service-grid">
+      <article><i>01</i><b>STAGE 1</b><p>Прирост мощности и момента без аппаратных доработок.</p></article>
+      <article><i>02</i><b>STAGE 2</b><p>Расширенная калибровка под подготовленный автомобиль.</p></article>
+      <article><i>03</i><b>EGR OFF</b><p>Категория решений для соответствующих конфигураций.</p></article>
+      <article><i>04</i><b>DPF OFF</b><p>Категория решений по совместимым идентификаторам.</p></article>
+      <article><i>05</i><b>AdBlue</b><p>Решения для поддерживаемых ECU и версий ПО.</p></article>
+      <article><i>06</i><b>ECU каталог</b><p>Поиск по производителю блока, HW и SW.</p></article>
+    </div>
+  </section>
+
+  <section class="section-shell brands">
+    <span>BMW</span><span>AUDI</span><span>MERCEDES</span><span>VOLKSWAGEN</span><span>TOYOTA</span><span>FORD</span><span>SKODA</span>
+  </section>
+
+  <section class="section-shell catalog" id="catalog">
+    <div class="section-title">
+      <div><span class="kicker">ДЕМО-КАТАЛОГ</span><h2>Найденные калибровки</h2></div>
+      <div class="catalog-tools">
+        <input id="quickSearch" placeholder="Поиск по модели, ECU, HW, SW">
+        <select id="sortSelect"><option value="popular">Сначала популярные</option><option value="cheap">Сначала дешевле</option><option value="expensive">Сначала дороже</option></select>
+      </div>
+    </div>
+    <div class="result-line"><span id="resultCount">0 решений</span><button id="resetFilters">Сбросить фильтры</button></div>
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+
+  <section class="section-shell how" id="how">
+    <div class="section-title">
+      <div><span class="kicker">КАК ЭТО РАБОТАЕТ</span><h2>От подбора до файла</h2></div>
+    </div>
+    <div class="steps">
+      <article><span>1</span><h3>Выбираете автомобиль</h3><p>Или вводите ECU, HW и SW напрямую.</p></article>
+      <article><span>2</span><h3>Система проверяет базу</h3><p>Показывает только подходящие варианты и предупреждает о несовпадении.</p></article>
+      <article><span>3</span><h3>Оплачиваете заказ</h3><p>В рабочей версии платёж будет через WooCommerce + выбранный шлюз.</p></article>
+      <article><span>4</span><h3>Получаете доступ</h3><p>Файл появляется в личном кабинете после подтверждённой оплаты.</p></article>
+    </div>
+  </section>
+
+  <section class="section-shell upload-section" id="upload">
+    <div class="upload-copy">
+      <span class="kicker">НЕТ ТОЧНОГО СОВПАДЕНИЯ?</span>
+      <h2>Загрузите оригинальный файл</h2>
+      <p>В рабочей версии файл будет привязан к заказу. Специалист сможет обработать его и вернуть результат в личный кабинет.</p>
+      <ul>
+        <li>BIN / ORI / ZIP</li>
+        <li>Привязка к заказу</li>
+        <li>Статус «В обработке»</li>
+        <li>Готовый файл в кабинете</li>
+      </ul>
+    </div>
+    <div class="dropzone" id="dropzone">
+      <div class="upload-icon">⇧</div>
+      <b>Перетащите оригинальный файл сюда</b>
+      <span>или нажмите, чтобы выбрать файл</span>
+      <small>Демо: файл никуда не отправляется</small>
+      <input type="file" id="fileInput" hidden>
+    </div>
+  </section>
+
+  <section class="section-shell account-demo" id="account">
+    <div class="section-title">
+      <div><span class="kicker">ЛИЧНЫЙ КАБИНЕТ — ДЕМО</span><h2>Покупки и заказы</h2></div>
+      <button class="ghost-btn" data-open="login">Войти в кабинет</button>
+    </div>
+    <div class="account-grid">
+      <article class="account-card">
+        <div class="order-head"><b>Заказ #FT-1048</b><span class="paid">Оплачено</span></div>
+        <h3>BMW 320d F30 — Stage 1</h3>
+        <p>Bosch EDC17C50 • HW 028101xxxx • SW 1037523456</p>
+        <button class="download-demo">Скачать файл</button>
+      </article>
+      <article class="account-card">
+        <div class="order-head"><b>Заказ #FT-1049</b><span class="processing">В обработке</span></div>
+        <h3>Индивидуальная калибровка</h3>
+        <p>Загружен original_vw_20tdi.bin • 2.1 MB</p>
+        <button disabled>Ожидается результат</button>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-shell faq">
+    <div class="section-title"><div><span class="kicker">FAQ</span><h2>Частые вопросы</h2></div></div>
+    <details><summary>Где будут храниться файлы?</summary><p>На первом этапе — в закрытой папке на VPS. Прямые публичные ссылки не используются.</p></details>
+    <details><summary>Когда клиент получает скачивание?</summary><p>После подтверждения оплаты заказом WooCommerce. Затем ссылка появляется в личном кабинете.</p></details>
+    <details><summary>Можно ли импортировать десятки тысяч записей?</summary><p>Да. Для этого будет отдельный импорт из CSV/структуры папок с проверкой дублей.</p></details>
+  </section>
 </main>
-<footer id="contact"><strong>FlashTune</strong><span>Статический GitHub Pages preview</span></footer>
+
+<footer class="footer">
+  <div class="footer-main section-shell">
+    <div class="footer-brand">
+      <div class="brand"><span class="bolt">ϟ</span><span>Flash<b>Tune</b></span></div>
+      <p>Сервис подбора и выдачи калибровок ЭБУ.</p>
+      <div class="socials"><a href="#">VK</a><a href="#">TG</a><a href="#">YT</a></div>
+    </div>
+    <div><h4>Каталог</h4><a href="#catalog">Все решения</a><a href="#catalog">Stage 1 / 2</a><a href="#catalog">По ECU</a><a href="#upload">Индивидуальный заказ</a></div>
+    <div><h4>Информация</h4><a href="#how">Как это работает</a><a href="#faq">FAQ</a><a href="#">Оплата</a><a href="#">Гарантии</a></div>
+    <div><h4>Поддержка</h4><a href="#upload">Загрузить файл</a><a href="#account">Личный кабинет</a><a href="#">Сотрудничество</a><a href="#">Контакты</a></div>
+  </div>
+  <div class="footer-bottom section-shell"><span>© 2026 FlashTune — демонстрационный прототип</span><span><a href="#">Пользовательское соглашение</a> · <a href="#">Политика конфиденциальности</a></span></div>
+</footer>
+
+<div class="modal" id="cartModal" aria-hidden="true">
+  <div class="modal-card">
+    <button class="modal-close" data-close>×</button>
+    <span class="kicker">КОРЗИНА — ДЕМО</span>
+    <h2>Ваш заказ</h2>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
+    <button class="btn primary full" id="checkoutDemo">Перейти к оплате</button>
+    <small>В демо деньги не списываются. В WordPress здесь будет WooCommerce + платёжный шлюз.</small>
+  </div>
+</div>
+
+<div class="modal" id="loginModal" aria-hidden="true">
+  <div class="modal-card narrow">
+    <button class="modal-close" data-close>×</button>
+    <span class="kicker">ЛИЧНЫЙ КАБИНЕТ</span>
+    <h2>Вход</h2>
+    <label>Email<input value="demo@flashtune.ru"></label>
+    <label>Пароль<input type="password" value="demopassword"></label>
+    <button class="btn primary full" id="demoLogin">Войти в демо</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="./app.js"></script>
 </body>
 </html>
