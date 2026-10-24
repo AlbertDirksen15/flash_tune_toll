@@ -1,104 +1,39 @@
-const products=[
-{brand:'BMW',model:'320d F30',engine:'2.0d B47',ecu:'Bosch EDC17C50',hw:'0281018475',sw:'1037523456',type:'Stage 1',price:5900,power:'190 → 230 л.с.',torque:'+20%',pop:98},
-{brand:'BMW',model:'530d G30',engine:'3.0d B57',ecu:'Bosch MD1CS001',hw:'0281037351',sw:'1039S12345',type:'Stage 1',price:7900,power:'265 → 315 л.с.',torque:'+18%',pop:95},
-{brand:'Audi',model:'A4 B9',engine:'2.0 TDI',ecu:'Bosch MD1CP004',hw:'04L907309',sw:'9978',type:'Stage 1',price:6500,power:'190 → 225 л.с.',torque:'+19%',pop:93},
-{brand:'Volkswagen',model:'Passat B8',engine:'2.0 TDI CR',ecu:'Bosch EDC17C64',hw:'04L907309R',sw:'9978',type:'DPF Off',price:4500,power:'Stock',torque:'—',pop:91},
-{brand:'Mercedes',model:'Sprinter W906',engine:'2.1 CDI OM651',ecu:'Delphi CRD3',hw:'6519020900',sw:'6519036413',type:'EGR Off',price:4500,power:'Stock',torque:'—',pop:88},
-{brand:'Toyota',model:'Hilux',engine:'2.8 D-4D',ecu:'Denso GEN3',hw:'89661-0KQ90',sw:'3F0100',type:'Stage 1',price:6500,power:'204 → 235 л.с.',torque:'+15%',pop:87},
-{brand:'Skoda',model:'Octavia A7',engine:'1.8 TSI',ecu:'Continental SIMOS 18',hw:'06K907425B',sw:'0002',type:'Stage 1',price:5900,power:'180 → 220 л.с.',torque:'+22%',pop:86},
-{brand:'Ford',model:'Transit',engine:'2.0 EcoBlue',ecu:'Continental SID212',hw:'GK2A-12A650',sw:'HAA',type:'AdBlue Off',price:5200,power:'Stock',torque:'—',pop:80},
-{brand:'BMW',model:'X5 F15',engine:'3.0d N57',ecu:'Bosch EDC17CP45',hw:'0281019855',sw:'1037530102',type:'Stage 2',price:8900,power:'258 → 330 л.с.',torque:'+27%',pop:83},
-{brand:'Audi',model:'Q7 4M',engine:'3.0 TDI',ecu:'Bosch MD1CP004',hw:'4M0907401',sw:'0007',type:'AdBlue Off',price:6900,power:'Stock',torque:'—',pop:79},
-{brand:'Volkswagen',model:'Tiguan II',engine:'2.0 TSI',ecu:'Continental SIMOS 18.10',hw:'06K907425D',sw:'0005',type:'Stage 1',price:6200,power:'180 → 225 л.с.',torque:'+20%',pop:82},
-{brand:'Mercedes',model:'C220d W205',engine:'2.1 CDI',ecu:'Bosch EDC17C66',hw:'6519041000',sw:'6519032813',type:'Stage 1',price:6400,power:'170 → 205 л.с.',torque:'+19%',pop:84}
-];
-
-let state={brand:'',model:'',engine:'',ecu:'',type:'',query:'',sort:'popular',cart:[]};
-const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
-
-function uniq(arr){return [...new Set(arr)].sort()}
-function fillSelect(el,vals,label){const current=el.value;el.innerHTML='<option value="">'+label+'</option>'+vals.map(v=>'<option>'+v+'</option>').join('');if(vals.includes(current))el.value=current}
-function syncFilters(){
-  fillSelect($('#brandFilter'),uniq(products.map(p=>p.brand)),'Любая марка');
-  const scopedBrand=state.brand?products.filter(p=>p.brand===state.brand):products;
-  fillSelect($('#modelFilter'),uniq(scopedBrand.map(p=>p.model)),'Любая модель');
-  const scopedModel=state.model?scopedBrand.filter(p=>p.model===state.model):scopedBrand;
-  fillSelect($('#engineFilter'),uniq(scopedModel.map(p=>p.engine)),'Любой двигатель');
-  fillSelect($('#ecuFilter'),uniq(scopedModel.map(p=>p.ecu)),'Любой ЭБУ');
-}
-function rub(n){return new Intl.NumberFormat('ru-RU').format(n)+' ₽'}
-function filtered(){
-  let list=products.filter(p=>
-    (!state.brand||p.brand===state.brand)&&
-    (!state.model||p.model===state.model)&&
-    (!state.engine||p.engine===state.engine)&&
-    (!state.ecu||p.ecu===state.ecu)&&
-    (!state.type||p.type===state.type)
-  );
-  if(state.query){
-    const q=state.query.toLowerCase();
-    list=list.filter(p=>Object.values(p).some(v=>String(v).toLowerCase().includes(q)));
-  }
-  if(state.sort==='cheap')list.sort((a,b)=>a.price-b.price);
-  else if(state.sort==='expensive')list.sort((a,b)=>b.price-a.price);
-  else list.sort((a,b)=>b.pop-a.pop);
-  return list;
-}
-function render(){
-  const list=filtered();
-  $('#resultCount').textContent=list.length+' '+(list.length===1?'решение':'решений');
-  $('#productGrid').innerHTML=list.map((p,i)=>`
-  <article class="product-card">
-    <div class="product-image"><span class="product-tag">${p.type}</span></div>
-    <div class="product-body">
-      <span class="match">● Совместимость по демо-данным</span>
-      <h3>${p.brand} ${p.model}</h3>
-      <div class="subtitle">${p.engine} • ${p.ecu}</div>
-      <div class="specs">
-        <span>HW: ${p.hw}</span><span>SW: ${p.sw}</span>
-        <span>${p.power}</span><span>Момент: ${p.torque}</span>
-      </div>
-      <div class="product-bottom">
-        <div class="price">${rub(p.price)}</div>
-        <button class="buy-btn" data-buy="${products.indexOf(p)}">Купить</button>
-      </div>
-    </div>
-  </article>`).join('') || '<div style="color:#8f9cb0;padding:30px 0">Точных совпадений нет. Можно загрузить оригинальный файл для индивидуального заказа.</div>';
-  $$('[data-buy]').forEach(b=>b.onclick=()=>addToCart(products[+b.dataset.buy]));
-}
-function addToCart(p){state.cart.push(p);updateCart();toast('Добавлено в корзину: '+p.brand+' '+p.model)}
-function updateCart(){
-  $('#cartCount').textContent=state.cart.length;
-  $('#cartItems').innerHTML=state.cart.length?state.cart.map((p,i)=>`<div class="cart-row"><div><b>${p.brand} ${p.model}</b><small>${p.type} • ${p.ecu}</small></div><div><b>${rub(p.price)}</b><button data-remove="${i}">Удалить</button></div></div>`).join(''):'<p style="color:#8796aa">Корзина пока пустая.</p>';
-  $('#cartTotal').textContent=rub(state.cart.reduce((s,p)=>s+p.price,0));
-  $$('[data-remove]').forEach(b=>b.onclick=()=>{state.cart.splice(+b.dataset.remove,1);updateCart()});
-}
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove('show'),2400)}
-function scanAndRender(){
-  const s=$('#scanStatus');s.classList.add('active');
-  setTimeout(()=>{s.classList.remove('active');render();$('#catalog').scrollIntoView({behavior:'smooth'});toast(filtered().length?'Совместимые решения найдены':'Точного совпадения нет')},900);
-}
-syncFilters();render();updateCart();
-
-$('#brandFilter').onchange=e=>{state.brand=e.target.value;state.model='';state.engine='';state.ecu='';syncFilters()};
-$('#modelFilter').onchange=e=>{state.model=e.target.value;state.engine='';state.ecu='';syncFilters()};
-$('#engineFilter').onchange=e=>state.engine=e.target.value;
-$('#ecuFilter').onchange=e=>state.ecu=e.target.value;
-$('#findBtn').onclick=scanAndRender;
-$('#ecuFindBtn').onclick=()=>{state.query=$('#ecuSearch').value.trim();state.type=$('#typeFilter').value;scanAndRender()};
-$('#quickSearch').oninput=e=>{state.query=e.target.value.trim();render()};
-$('#sortSelect').onchange=e=>{state.sort=e.target.value;render()};
-$('#resetFilters').onclick=()=>{state={...state,brand:'',model:'',engine:'',ecu:'',type:'',query:'',sort:'popular'};$('#quickSearch').value='';$('#ecuSearch').value='';$('#typeFilter').value='';syncFilters();render()};
-
-$$('.mode').forEach(b=>b.onclick=()=>{$$('.mode').forEach(x=>x.classList.remove('active'));b.classList.add('active');const car=b.dataset.mode==='car';$('#carFinder').classList.toggle('hidden',!car);$('#ecuFinder').classList.toggle('hidden',car)});
-$('#cartBtn').onclick=()=>openModal('cart');
-$$('[data-open="login"]').forEach(b=>b.onclick=()=>openModal('login'));
-function openModal(name){$('#'+name+'Modal').classList.add('open');document.body.classList.add('modal-open')}
-function closeModals(){$$('.modal').forEach(m=>m.classList.remove('open'));document.body.classList.remove('modal-open')}
-$$('[data-close]').forEach(b=>b.onclick=closeModals);$$('.modal').forEach(m=>m.onclick=e=>{if(e.target===m)closeModals()});
-$('#checkoutDemo').onclick=()=>{if(!state.cart.length)return toast('Добавьте хотя бы одну калибровку');toast('Демо оплаты: здесь откроется WooCommerce Checkout')};
-$('#demoLogin').onclick=()=>{closeModals();$('#account').scrollIntoView({behavior:'smooth'});toast('Выполнен демо-вход')};
-$('.download-demo').onclick=()=>toast('В рабочей версии начнётся защищённое скачивание');
-const dz=$('#dropzone'),fi=$('#fileInput');dz.onclick=()=>fi.click();fi.onchange=()=>{if(fi.files[0]){dz.querySelector('b').textContent=fi.files[0].name;dz.querySelector('span').textContent=(fi.files[0].size/1024/1024).toFixed(2)+' MB • готов к созданию заказа';toast('Файл выбран. В демо загрузка отключена.')}};
-['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('drag')}));['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('drag')}));dz.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f){dz.querySelector('b').textContent=f.name;dz.querySelector('span').textContent=(f.size/1024/1024).toFixed(2)+' MB • готов к созданию заказа';toast('Файл выбран. В демо загрузка отключена.')}});
-$('#menuToggle').onclick=()=>$('#mainNav').classList.toggle('open');
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const icon=id=>`<svg aria-hidden="true"><use href="#${id}"/></svg>`;
+const data=[
+{id:1,brand:'BMW',model:'320d F30',engine:'2.0d B47',ecu:'Bosch EDC17C50',name:'BMW 320d F30',type:'STAGE 1',details:['2.0d B47','190 л.с. → 230 л.с.','Крутящий момент +20%'],price:5900},
+{id:2,brand:'Audi',model:'A4 B9',engine:'2.0 TDI CR',ecu:'Bosch EDC17C64',name:'VAG 2.0 TDI',type:'DPF OFF',details:['2.0 TDI CR','Удаление DPF','Без ошибок'],price:4500},
+{id:3,brand:'Mercedes',model:'Sprinter',engine:'2.1 CDI OM651',ecu:'Delphi CRD3',name:'Mercedes Sprinter',type:'EGR OFF',details:['2.1 CDI OM651','Отключение EGR','Без ошибок'],price:4500},
+{id:4,brand:'Toyota',model:'Land Cruiser',engine:'2.8 D-4D',ecu:'Denso Gen4',name:'Toyota 2.8 D-4D',type:'STAGE 1',details:['2.8 D-4D','204 л.с. → 255 л.с.','Крутящий момент +15%'],price:6500},
+{id:5,brand:'Volkswagen',model:'Golf VII',engine:'2.0 TSI',ecu:'Bosch MED17',name:'Volkswagen Golf VII',type:'STAGE 2',details:['2.0 TSI','220 л.с. → 300 л.с.','Настроенный впуск / выпуск'],price:7900},
+{id:6,brand:'Ford',model:'Transit',engine:'2.0 EcoBlue',ecu:'Continental SID211',name:'Ford Transit',type:'ADBLUE OFF',details:['2.0 EcoBlue','Система SCR','Демо калибровка'],price:4900}];
+const services=[['STAGE 1','gauge','#00cfff','Оптимизация мощности и крутящего момента'],['STAGE 2','engine','#ac4dff','Серьёзный прирост мощности'],['EGR OFF','engine','#ff234b','Отключение системы EGR'],['DPF OFF','filter','#ff9b19','Отключение сажевого фильтра'],['ADBLUE OFF','filter','#00daff','Отключение системы AdBlue / SCR'],['КАТАЛОГ ПО ЭБУ','chip','#b55cff','Большая база прошивок для разных ЭБУ']];
+$('.services').innerHTML=services.map(([name,i,c,desc])=>`<button class="service" style="--accent:${c}" data-type="${name}"><h3>${name}</h3>${icon(i)}<p>${desc}</p></button>`).join('');
+const brands=[['BMW','◉'],['Audi','◎◎◎◎'],['Mercedes','✧'],['Toyota','◎'],['Volkswagen','Ⓦ'],['Ford','𝓕𝓸𝓻𝓭']];
+$('.brands').innerHTML=brands.map(([name,s])=>`<button class="brand" data-brand="${name}" aria-label="Прошивки ${name}"><span class="brand-symbol">${s}</span><small>${name.toUpperCase()}</small></button>`).join('');
+let cart=[];try{cart=JSON.parse(localStorage.getItem('flashtune-demo-cart')||'[]').filter(id=>data.some(p=>p.id===id))}catch{}
+let activeType='',expanded=false;
+const money=n=>n.toLocaleString('ru-RU')+' ₽';
+function toast(t){$('#toast').textContent=t;$('#toast').classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2800)}
+function count(){ $('#cartCount').textContent=cart.length;try{localStorage.setItem('flashtune-demo-cart',JSON.stringify(cart))}catch{} }
+function add(id){if(cart.includes(id)){toast('Эта прошивка уже в корзине');return}cart.push(id);count();toast('Прошивка добавлена в корзину')}
+function render(){let rows=data.filter(p=>(!$('#brand').value||p.brand===$('#brand').value)&&(!$('#model').value||p.model===$('#model').value)&&(!$('#engineSelect').value||p.engine===$('#engineSelect').value)&&(!$('#ecu').value||p.ecu===$('#ecu').value)&&(!activeType||p.type===activeType));if(!expanded&&!$('#brand').value&&!activeType)rows=rows.slice(0,4);$('.products').innerHTML=rows.map(p=>`<article class="product" tabindex="0" role="button" aria-label="Подробнее: ${p.name} ${p.type}" data-product="${p.id}"><div class="product-image" role="img" aria-label="Иллюстрация автомобиля в неоновом городе"></div><div class="product-copy"><h3>${p.name}<br>${p.type.replace('STAGE','Stage').replace('OFF','Off')}</h3><ul>${p.details.map(d=>`<li>${d}</li>`).join('')}</ul></div><div class="price-row"><strong>${money(p.price)}</strong><button class="add" data-add="${p.id}" aria-label="В корзину: ${p.name}">${icon('cart')}</button></div></article>`).join('');$('.empty').hidden=rows.length>0;$$('[data-brand]').forEach(b=>b.classList.toggle('selected',b.dataset.brand===$('#brand').value));$$('[data-type]').forEach(b=>b.classList.toggle('selected',b.dataset.type===activeType))}
+function options(sel,values,placeholder){sel.innerHTML=`<option value="">${placeholder}</option>`+values.map(v=>`<option>${v}</option>`).join('');sel.disabled=!values.length}
+options($('#brand'),brands.map(b=>b[0]),'Выберите марку');
+const chain=['brand','model','engineSelect','ecu'],keys=['brand','model','engine','ecu'],hints=['Выберите марку','Выберите модель','Выберите двигатель','Выберите ЭБУ'];
+function cascade(index){for(let i=index+1;i<chain.length;i++){const values=[...new Set(data.filter(p=>chain.slice(0,i).every((s,j)=>$('#'+s).value&&p[keys[j]]===$('#'+s).value)).map(p=>p[keys[i]]))];options($('#'+chain[i]),values,hints[i])}}
+chain.forEach((id,i)=>$('#'+id).addEventListener('change',()=>cascade(i)));
+$('#finder').onsubmit=e=>{e.preventDefault();expanded=true;render();$('#catalogTitle').textContent=$('#brand').value?'ПРОШИВКИ '+$('#brand').value.toUpperCase():'КАТАЛОГ ПРОШИВОК';$('#catalog').scrollIntoView({behavior:'smooth'})};
+$('#reset').onclick=()=>{expanded=true;activeType='';$('#brand').value='';cascade(0);$('#catalogTitle').textContent='ВСЕ ПРОШИВКИ';render()};
+$$('[data-brand]').forEach(b=>b.onclick=()=>{$('#brand').value=b.dataset.brand;cascade(0);activeType='';expanded=true;render();$('#catalogTitle').textContent='ПРОШИВКИ '+b.dataset.brand.toUpperCase();$('#catalog').scrollIntoView({behavior:'smooth'})});
+$$('[data-type]').forEach(b=>b.onclick=()=>{if(b.dataset.type==='КАТАЛОГ ПО ЭБУ'){$('#finder').scrollIntoView();$('#brand').focus();return}activeType=activeType===b.dataset.type?'':b.dataset.type;expanded=true;render();$('#catalogTitle').textContent=activeType||'КАТАЛОГ ПРОШИВОК';$('#catalog').scrollIntoView({behavior:'smooth'})});
+const modal=$('#modal');function open(html){$('#modalBody').innerHTML=html;if(!modal.open)modal.showModal()}$('.close').onclick=()=>modal.close();modal.onclick=e=>{if(e.target===modal){const r=modal.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)modal.close()}};
+function detail(id){const p=data.find(p=>p.id===id);open(`<div class="tag">ДЕМОНСТРАЦИОННАЯ ПРОШИВКА</div><h2>${p.name} · ${p.type}</h2><p>${p.details.join('<br>')}<br>ЭБУ: ${p.ecu}</p><p>Пример карточки товара. Совместимость реальной прошивки проверяется по исходному файлу и идентификаторам ЭБУ.</p><div class="cart-total">${money(p.price)}</div><button class="btn primary" id="detailAdd">${icon('cart')}ДОБАВИТЬ В КОРЗИНУ</button>`);$('#detailAdd').onclick=()=>add(id)}
+$('.products').onclick=e=>{const a=e.target.closest('[data-add]');if(a){add(Number(a.dataset.add));return}const p=e.target.closest('[data-product]');if(p)detail(Number(p.dataset.product))};$('.products').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-product]')){e.preventDefault();detail(Number(e.target.dataset.product))}};
+function showCart(){open(`<h2>КОРЗИНА <span class="red">/ ${cart.length}</span></h2>${cart.length?cart.map(id=>{const p=data.find(p=>p.id===id);return `<div class="cart-line"><span>${p.name}<br><small>${p.type} · ${money(p.price)}</small></span><button data-remove="${id}" aria-label="Удалить ${p.name}">Удалить</button></div>`}).join('')+`<div class="cart-total">Итого: ${money(cart.reduce((n,id)=>n+data.find(p=>p.id===id).price,0))}</div><button class="btn primary" id="checkout">ОФОРМИТЬ ДЕМО-ЗАКАЗ</button>`:'<p>Корзина пока пуста. Выберите прошивку в каталоге.</p><button class="btn secondary" id="toCatalog">ПЕРЕЙТИ В КАТАЛОГ</button>'}`);$$('[data-remove]').forEach(b=>b.onclick=()=>{cart=cart.filter(id=>id!==Number(b.dataset.remove));count();showCart()});if($('#checkout'))$('#checkout').onclick=()=>{open('<h2>ДЕМО-ЗАКАЗ ГОТОВ</h2><p>Вы прошли сценарий оформления. В этом демо оплата не производится и заказ никуда не отправляется.</p>')};if($('#toCatalog'))$('#toCatalog').onclick=()=>{modal.close();$('#catalog').scrollIntoView()}}
+$('#cartOpen').onclick=showCart;
+function upload(){open(`<h2>ЗАГРУЗИТЬ ФАЙЛ ЭБУ</h2><p>Выберите исходный файл .bin, .ori или .hex. В демо файл обрабатывается только в вашем браузере.</p><form id="uploadForm"><label class="modal-field">Исходный файл<input type="file" id="file" accept=".bin,.ori,.hex" required></label><p id="fileStatus"></p><button class="btn primary">ПРОВЕРИТЬ ФАЙЛ</button></form>`);$('#uploadForm').onsubmit=e=>{e.preventDefault();const f=$('#file').files[0];$('#fileStatus').textContent=!/\.(bin|ori|hex)$/i.test(f.name)?'Поддерживаются только BIN, ORI и HEX.':f.size>32*1024*1024?'Максимальный размер — 32 МБ.':`Файл выбран: ${f.name} (${(f.size/1024).toFixed(1)} КБ). Демо-проверка завершена. Файл не отправлялся на сервер.`}}
+$('#uploadOpen').onclick=upload;$('#footerUpload').onclick=upload;$('#quickSearch').onclick=()=>{$('#finder').scrollIntoView();$('#brand').focus()};
+$('#login').onclick=()=>open('<h2>ЛИЧНЫЙ КАБИНЕТ</h2><p>Это демонстрация интерфейса FlashTune. Корзина сохраняется в этом браузере. Регистрация и авторизация появятся при подключении серверной части.</p>');
+const infos={'Как это работает':'Выберите автомобиль, найдите прошивку и откройте карточку товара. Проверьте сценарий добавления в корзину и оформления демо-заказа.','Гарантии':'В макете показаны рекламные показатели. В демо они являются иллюстрацией дизайна и не подтверждают безопасность или совместимость реальных файлов.','Доставка и оплата':'Демонстрационный магазин: платежи и доставка файлов не подключены.','FAQ':'Фильтр подбирает примеры по марке, модели, двигателю и ЭБУ. Кнопки услуг фильтруют каталог по типу настройки.','Поддержка':'Это демо по вашему макету. Контакты службы поддержки можно добавить при запуске магазина.','Установка':'Для реальной установки нужны проверка совместимости, подходящее оборудование и специалист. В демо установка прошивок недоступна.','Сотрудничество':'Этот раздел готов для добавления ваших условий сотрудничества и контактных данных.','Конфиденциальность':'Демо хранит идентификаторы товаров в localStorage вашего браузера. Выбранный файл остаётся на вашем устройстве. Внешний сервис Google Fonts используется для загрузки шрифтов.'};
+$$('[data-info]').forEach(b=>b.onclick=()=>open(`<h2>${b.dataset.info.toUpperCase()}</h2><p>${infos[b.dataset.info]}</p>`));count();render();
